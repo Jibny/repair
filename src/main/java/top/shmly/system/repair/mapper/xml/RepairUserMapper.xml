@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.shmly.system.repair.mapper.RepairUserMapper">
+
+    <select id="selectAll" resultType="RepairUser">
+        select * from rsp_repair_user ${ew.customSqlSegment}
+    </select>
+<!--    &lt;!&ndash; 根据用户名查询 &ndash;&gt;-->
+<!--    <select id="getDemoByName" resultType="org.jeecg.modules.demo.test.entity.JeecgDemo">-->
+<!--		select * from  demo  where name = #{name}-->
+<!--	</select>-->
+
+<!--    &lt;!&ndash; 根据权限sql查询数据集 &ndash;&gt;-->
+<!--    <select id="queryListWithPermission" parameterType="Object" resultType="org.jeecg.modules.demo.test.entity.JeecgDemo">-->
+<!--		select * from demo where 1=1 ${permissionSql}-->
+<!--	</select>-->
+</mapper>
