@@ -1,6 +1,8 @@
 package top.shmly.system.repair.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +25,7 @@ public class RepairType implements Serializable {
      * @mbggenerated Fri Apr 17 23:30:44 CST 2020
      */
     @ApiModelProperty("类型主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
 

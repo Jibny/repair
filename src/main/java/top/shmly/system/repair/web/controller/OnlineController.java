@@ -1,6 +1,9 @@
 package top.shmly.system.repair.web.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -9,6 +12,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.shmly.system.repair.contant.RepairOnlineStatus;
 import top.shmly.system.repair.entity.RepairOnline;
 import top.shmly.system.repair.service.RepairOnlineService;
 import top.shmly.system.repair.vo.Result;
@@ -131,5 +135,47 @@ public class OnlineController {
         return Result.ok(repairOnline);
     }
 
+
+    /**
+     * 申请报修
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping(value = "/applyById")
+    @ApiOperation(value = "通过ID申请报修单状态", notes = "申请报修单状态")
+    public Result<?> applyById(@ApiParam(name = "id", value = "报修单id", required = true) @RequestParam(name = "id", required = true) String id) {
+        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id",id).set("status", RepairOnlineStatus.STATUS_APPLICATION));
+        log.info("applyById查询报修单: " + id);
+        return Result.ok(RepairOnlineStatus.STATUS_APPLICATION);
+    }
+
+    /**
+     * 处理报修
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping(value = "/dealById")
+    @ApiOperation(value = "通过ID处理报修单状态", notes = "处理报修单状态")
+    public Result<?> dealById(@ApiParam(name = "id", value = "报修单id", required = true) @RequestParam(name = "id", required = true) String id) {
+        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id",id).set("status", RepairOnlineStatus.STATUS_DEAL));
+        log.info("applyById查询报修单: " + id);
+        return Result.ok(RepairOnlineStatus.STATUS_DEAL);
+    }
+
+    /**
+     * 完成报修
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping(value = "/completeById")
+    @ApiOperation(value = "通过ID完成报修单状态", notes = "完成报修单状态")
+    public Result<?> completeById(@ApiParam(name = "id", value = "报修单id", required = true) @RequestParam(name = "id", required = true) String id) {
+        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id",id).set("status", RepairOnlineStatus.STATUS_COMPLETE));
+        log.info("applyById查询报修单: " + id);
+        return Result.ok(RepairOnlineStatus.STATUS_COMPLETE);
+    }
 
 }

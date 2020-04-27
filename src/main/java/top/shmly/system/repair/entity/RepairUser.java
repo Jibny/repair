@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.SqlCondition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,6 +28,7 @@ public class RepairUser extends Model<RepairUser> {
      * @mbggenerated Fri Apr 17 23:30:44 CST 2020
      */
     @ApiModelProperty("用户主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**

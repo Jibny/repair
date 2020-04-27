@@ -7,7 +7,8 @@
     Welcome Repair System API Location
 </h1>
 <div>
-    <a href="http://localhost:8080/repair/swagger-ui.html" target="_self">http://localhost:8080/repair/swagger-ui.html</a>
+    <a href="https://shmly.top/repair/swagger-ui.html" target="_self">repair-swagger-ui</a>
+    <a href="https://shmly.top/repair/doc.html" target="_self">repair-swagger-ui-doc</a>
 </div>
 </body>
 </html>

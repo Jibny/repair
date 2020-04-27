@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,6 +28,7 @@ public class RepairAddress implements Serializable {
      * @mbggenerated Fri Apr 17 23:30:44 CST 2020
      */
     @ApiModelProperty("地址主键")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
 
