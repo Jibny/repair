@@ -1,4 +1,4 @@
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Test page</title>
 </head>
@@ -8,6 +8,7 @@
 </h1>
 <div>
     <a href="https://shmly.top/repair/swagger-ui.html" target="_self">repair-swagger-ui</a>
+    <br />
     <a href="https://shmly.top/repair/doc.html" target="_self">repair-swagger-ui-doc</a>
 </div>
 </body>
