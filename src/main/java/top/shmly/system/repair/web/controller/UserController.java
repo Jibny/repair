@@ -55,6 +55,25 @@ public class UserController {
     }
 
     /**
+     * 当前用户查询
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @ApiOperation(value = "获取当前用户数据", notes = "获取当前用户数据")
+    @GetMapping(value = "/listById")
+    public Result<?> listById(@RequestParam(name = "id", required = true) String id, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                          HttpServletRequest req) {
+        QueryWrapper<RepairUser> queryWrapper = new QueryWrapper<>();
+        Page<RepairUser> page = new Page<RepairUser>(pageNo, pageSize);
+        IPage<RepairUser> pageList = repairUserService.page(page, queryWrapper.eq("id",id));
+        return Result.ok(pageList);
+    }
+
+
+    /**
      * 添加
      *
      * @param repairUser

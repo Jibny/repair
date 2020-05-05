@@ -1,6 +1,5 @@
 package top.shmly.system.repair.web.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.swagger.annotations.Api;
@@ -41,7 +40,7 @@ public class LoginController {
      * @time: 20-5-2 上午5:38
      */
 
-    @ApiOperation(value = "普通用户登入", notes = "普通用户登入")
+    @ApiOperation(value = "普通用户账号登入", notes = "普通用户账号登入")
     @PostMapping(value = "/userLogin")
     private Result<?> userLogin(@RequestParam(name = "username", required = true) String username,@RequestParam(name = "password", required = true) String password) {
 
@@ -57,6 +56,24 @@ public class LoginController {
         return Result.ok(repairUser);
     }
 
+
+    @ApiOperation(value = "普通用户学号登入", notes = "普通用户学号登入")
+    @PostMapping(value = "/userNumberLogin")
+    private Result<?> userNumberLogin(@RequestParam(name = "number", required = true) String number,@RequestParam(name = "password", required = true) String password) {
+
+        if (StringUtils.isBlank(number) || StringUtils.isBlank(password)) {
+            return Result.error("账号或密码不能为空");
+        }
+        Result<RepairUser> result = new Result<>();
+        RepairUser repairUser = repairUserService.getOne(new QueryWrapper<RepairUser>().eq("number", number).eq("password", password), false);
+        if (null == repairUser || "".equals(repairUser.getNumber())){
+            return Result.error("用户名或密码错误");
+        }
+        log.info("userNumberLogin登入普通用户为: " + repairUser.getNumber());
+        return Result.ok(repairUser);
+    }
+
+
     /**
      *
      * @description: 报修用户登入
@@ -64,7 +81,8 @@ public class LoginController {
      * @author: Jibny
      * @time: 20-5-2 上午5:38
      */
-    @ApiOperation(value = "维修人员登入", notes = "维修人员登入")
+
+    @ApiOperation(value = "维修人员账号登入", notes = "维修人员账号登入")
     @PostMapping(value = "/repairmanLogin")
     private Result<?> repairmanLogin(@RequestParam(name = "username", required = true) String username,@RequestParam(name = "password", required = true) String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
@@ -76,6 +94,30 @@ public class LoginController {
             return Result.error("用户名或密码错误");
         }
         log.info("repairmanLogin登入普通用户为: " + repairRepairman.getName());
+        return Result.ok(repairRepairman);
+    }
+
+
+    /**
+     *
+     * @description: 报修用户登入
+     * @param number,password
+     * @author: Jibny
+     * @time: 20-5-2 上午5:38
+     */
+
+    @ApiOperation(value = "维修人员工号登入", notes = "维修人员工号登入")
+    @PostMapping(value = "/repairmanNumberLogin")
+    private Result<?> repairmanNumberLogin(@RequestParam(name = "number", required = true) String number,@RequestParam(name = "password", required = true) String password) {
+        if (StringUtils.isBlank(number) || StringUtils.isBlank(password)) {
+            return Result.error("账号或密码不能为空");
+        }
+        Result<RepairRepairman> result = new Result<>();
+        RepairRepairman repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("number", number).eq("password", password), false);
+        if (null == repairRepairman || "".equals(repairRepairman.getNumber())){
+            return Result.error("用户名或密码错误");
+        }
+        log.info("repairmanNumberLogin登入普通用户为: " + repairRepairman.getNumber());
         return Result.ok(repairRepairman);
     }
 

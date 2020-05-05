@@ -54,6 +54,26 @@ public class RepairmanController {
         return Result.ok(pageList);
     }
 
+
+    /**
+     * 分页列表查询
+     *
+     * @param repairRepairman
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @ApiOperation(value = "获取当前维修人员信息", notes = "获取当前维修人员信息")
+    @GetMapping(value = "/listById")
+    public Result<?> listById(@RequestParam(name = "id", required = true) String id, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                          HttpServletRequest req) {
+        QueryWrapper<RepairRepairman> queryWrapper = new QueryWrapper<>();
+        Page<RepairRepairman> page = new Page<RepairRepairman>(pageNo, pageSize);
+        IPage<RepairRepairman> pageList = repairRepairmanService.page(page, queryWrapper.eq("id",id));
+        return Result.ok(pageList);
+    }
+
     /**
      * 添加
      *
