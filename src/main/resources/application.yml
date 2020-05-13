@@ -12,9 +12,9 @@ logging:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://121.36.29.88:3306/repair?useUnicode=true&useSSL=false&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/repair?useUnicode=true&useSSL=false&characterEncoding=utf-8
     username: root
-    password: JiBin.11112222
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # 下面为连接池的补充设置，应用到上面所有数据源中
