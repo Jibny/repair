@@ -152,7 +152,7 @@ public class OnlineController {
                                            HttpServletRequest req) {
         QueryWrapper<RepairOnline> queryWrapper = new QueryWrapper<>();
         Page<RepairOnline> page = new Page<RepairOnline>(pageNo, pageSize);
-        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category",repairOnline.getCategory()).eq("status",repairOnline.getStatus()).eq("repairmanName",repairOnline.getRepairmanName()));
+        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category",repairOnline.getCategory()).eq("status",repairOnline.getStatus()).eq("repairman_name",repairOnline.getRepairmanName()));
         log.info("查询结果数量：" + pageList.getRecords().size());
         return Result.ok(pageList);
     }
@@ -198,7 +198,7 @@ public class OnlineController {
             repairOnlineService.save(repairOnline);
             List<RepairRepairman> repairRepairmens = repairRepairmanService.getEmails(repairOnline.getCategory());
             for (RepairRepairman repairRepairmen: repairRepairmens) {
-                iMailService.sendSimpleMail(repairRepairmen.getEmail(),"维修处理","您有一条维修申请待处理");
+                iMailService.sendSimpleMail(repairRepairmen.getEmail(),"维修处理","您有一条维修申请待处理,报修地址:"+repairOnline.getArea()+"--"+repairOnline.getDorm()+"\n故障描述："+repairOnline.getProblem()+"\n请登入系统进行处理：http://localhost:8080/");
             }
             result.success("添加成功！");
         } catch (Exception e) {

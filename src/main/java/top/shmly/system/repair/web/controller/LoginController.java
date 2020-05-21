@@ -32,110 +32,163 @@ public class LoginController {
     @Autowired
     private RepairRepairmanService repairRepairmanService;
 
+
     /**
-     *
-     * @description: 普通用户登入
      * @param username,password
+     * @description: 普通用户登入
      * @author: Jibny
      * @time: 20-5-2 上午5:38
      */
 
-    @ApiOperation(value = "普通用户账号登入", notes = "普通用户账号登入")
+    @ApiOperation(value = "普通用户登入", notes = "普通用户登入")
     @PostMapping(value = "/userLogin")
-    private Result<?> userLogin(@RequestParam(name = "username", required = true) String username,@RequestParam(name = "password", required = true) String password) {
-
+    private Result<?> userLogin(@RequestParam(name = "username", required = true) String username, @RequestParam(name = "password", required = true) String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return Result.error("账号或密码不能为空");
         }
         Result<RepairUser> result = new Result<>();
-        RepairUser repairUser = repairUserService.getOne(new QueryWrapper<RepairUser>().eq("username", username).eq("password", password), false);
-        if (null == repairUser || "".equals(repairUser.getName())){
-            return Result.error("用户名或密码错误");
+        RepairUser repairUser = repairUserService.getOne(new QueryWrapper<RepairUser>().eq("username", username), false);
+        if (null == repairUser || "".equals(repairUser.getName())) {
+            repairUser = repairUserService.getOne(new QueryWrapper<RepairUser>().eq("number", username), false);
+            if (null == repairUser || "".equals(repairUser.getName())) {
+                return Result.error("该用户不存在");
+            }
+        }
+        if (!repairUser.getPassword().equals(password)) {
+            return Result.error("输入密码错误");
         }
         log.info("userLogin登入普通用户为: " + repairUser.getName());
         return Result.ok(repairUser);
     }
 
-
-    @ApiOperation(value = "普通用户学号登入", notes = "普通用户学号登入")
-    @PostMapping(value = "/userNumberLogin")
-    private Result<?> userNumberLogin(@RequestParam(name = "number", required = true) String number,@RequestParam(name = "password", required = true) String password) {
-
-        if (StringUtils.isBlank(number) || StringUtils.isBlank(password)) {
-            return Result.error("账号或密码不能为空");
-        }
-        Result<RepairUser> result = new Result<>();
-        RepairUser repairUser = repairUserService.getOne(new QueryWrapper<RepairUser>().eq("number", number).eq("password", password), false);
-        if (null == repairUser || "".equals(repairUser.getNumber())){
-            return Result.error("用户名或密码错误");
-        }
-        log.info("userNumberLogin登入普通用户为: " + repairUser.getNumber());
-        return Result.ok(repairUser);
-    }
-
-
-    /**
-     *
-     * @description: 报修用户登入
+        /**
      * @param username,password
+     * @description: 报修用户登入
      * @author: Jibny
      * @time: 20-5-2 上午5:38
      */
 
-    @ApiOperation(value = "维修人员账号登入", notes = "维修人员账号登入")
+    @ApiOperation(value = "维修人员登入", notes = "维修人员登入")
     @PostMapping(value = "/repairmanLogin")
-    private Result<?> repairmanLogin(@RequestParam(name = "username", required = true) String username,@RequestParam(name = "password", required = true) String password) {
+    private Result<?> repairmanLogin(@RequestParam(name = "username", required = true) String username, @RequestParam(name = "password", required = true) String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return Result.error("账号或密码不能为空");
         }
         Result<RepairRepairman> result = new Result<>();
-        RepairRepairman repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("username", username).eq("password", password), false);
-        if (null == repairRepairman || "".equals(repairRepairman.getName())){
-            return Result.error("用户名或密码错误");
+        RepairRepairman repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("username", username), false);
+        if (null == repairRepairman || "".equals(repairRepairman.getName())) {
+            repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("number", username), false);
+            if (null == repairRepairman || "".equals(repairRepairman.getName())){
+                return Result.error("该维修人员不存在");
+            }
         }
-        log.info("repairmanLogin登入普通用户为: " + repairRepairman.getName());
+        if (!repairRepairman.getPassword().equals(password)) {
+            return Result.error("输入密码错误");
+        }
+        log.info("repairmanLogin登录维修人员为: " + repairRepairman.getName());
         return Result.ok(repairRepairman);
     }
 
+//    /**
+//     * @param username,password
+//     * @description: 普通用户账号登入
+//     * @author: Jibny
+//     * @time: 20-5-2 上午5:38
+//     */
+//
+//    @ApiOperation(value = "普通用户账号登入", notes = "普通用户账号登入")
+//    @PostMapping(value = "/userLogin")
+//    private Result<?> userLogin(@RequestParam(name = "username", required = true) String username, @RequestParam(name = "password", required = true) String password) {
+//
+//        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+//            return Result.error("账号或密码不能为空");
+//        }
+//        Result<RepairUser> result = new Result<>();
+//        RepairUser repairUser = repairUserService.getOne(new QueryWrapper<RepairUser>().eq("username", username).eq("password", password), false);
+//        if (null == repairUser || "".equals(repairUser.getName())) {
+//            return Result.error("用户名或密码错误");
+//        }
+//        log.info("userLogin登入普通用户为: " + repairUser.getName());
+//        return Result.ok(repairUser);
+//    }
+
+//
+//    @ApiOperation(value = "普通用户学号登入", notes = "普通用户学号登入")
+//    @PostMapping(value = "/userNumberLogin")
+//    private Result<?> userNumberLogin(@RequestParam(name = "number", required = true) String number, @RequestParam(name = "password", required = true) String password) {
+//
+//        if (StringUtils.isBlank(number) || StringUtils.isBlank(password)) {
+//            return Result.error("账号或密码不能为空");
+//        }
+//        Result<RepairUser> result = new Result<>();
+//        RepairUser repairUser = repairUserService.getOne(new QueryWrapper<RepairUser>().eq("number", number).eq("password", password), false);
+//        if (null == repairUser || "".equals(repairUser.getNumber())) {
+//            return Result.error("用户名或密码错误");
+//        }
+//        log.info("userNumberLogin登入普通用户为: " + repairUser.getNumber());
+//        return Result.ok(repairUser);
+//    }
+//
+//
+//    /**
+//     * @param username,password
+//     * @description: 报修用户登入
+//     * @author: Jibny
+//     * @time: 20-5-2 上午5:38
+//     */
+//
+//    @ApiOperation(value = "维修人员账号登入", notes = "维修人员账号登入")
+//    @PostMapping(value = "/repairmanLogin")
+//    private Result<?> repairmanLogin(@RequestParam(name = "username", required = true) String username, @RequestParam(name = "password", required = true) String password) {
+//        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+//            return Result.error("账号或密码不能为空");
+//        }
+//        Result<RepairRepairman> result = new Result<>();
+//        RepairRepairman repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("username", username).eq("password", password), false);
+//        if (null == repairRepairman || "".equals(repairRepairman.getName())) {
+//            return Result.error("用户名或密码错误");
+//        }
+//        log.info("repairmanLogin登入普通用户为: " + repairRepairman.getName());
+//        return Result.ok(repairRepairman);
+//    }
+//
+//
+//    /**
+//     * @param number,password
+//     * @description: 报修用户登入
+//     * @author: Jibny
+//     * @time: 20-5-2 上午5:38
+//     */
+//
+//    @ApiOperation(value = "维修人员工号登入", notes = "维修人员工号登入")
+//    @PostMapping(value = "/repairmanNumberLogin")
+//    private Result<?> repairmanNumberLogin(@RequestParam(name = "number", required = true) String number, @RequestParam(name = "password", required = true) String password) {
+//        if (StringUtils.isBlank(number) || StringUtils.isBlank(password)) {
+//            return Result.error("账号或密码不能为空");
+//        }
+//        Result<RepairRepairman> result = new Result<>();
+//        RepairRepairman repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("number", number).eq("password", password), false);
+//        if (null == repairRepairman || "".equals(repairRepairman.getNumber())) {
+//            return Result.error("用户名或密码错误");
+//        }
+//        log.info("repairmanNumberLogin登入普通用户为: " + repairRepairman.getNumber());
+//        return Result.ok(repairRepairman);
+//    }
+
 
     /**
-     *
-     * @description: 报修用户登入
-     * @param number,password
-     * @author: Jibny
-     * @time: 20-5-2 上午5:38
-     */
-
-    @ApiOperation(value = "维修人员工号登入", notes = "维修人员工号登入")
-    @PostMapping(value = "/repairmanNumberLogin")
-    private Result<?> repairmanNumberLogin(@RequestParam(name = "number", required = true) String number,@RequestParam(name = "password", required = true) String password) {
-        if (StringUtils.isBlank(number) || StringUtils.isBlank(password)) {
-            return Result.error("账号或密码不能为空");
-        }
-        Result<RepairRepairman> result = new Result<>();
-        RepairRepairman repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("number", number).eq("password", password), false);
-        if (null == repairRepairman || "".equals(repairRepairman.getNumber())){
-            return Result.error("用户名或密码错误");
-        }
-        log.info("repairmanNumberLogin登入普通用户为: " + repairRepairman.getNumber());
-        return Result.ok(repairRepairman);
-    }
-
-
-    /**
-     *
-     * @description: 管理员登入
      * @param username,password
+     * @description: 管理员登入
      * @author: Jibny
      * @time: 20-5-2 上午5:38
      */
     @ApiOperation(value = "管理员登入", notes = "管理员登入")
     @PostMapping(value = "/adminLogin")
-    private Result<?> adminLogin(@RequestParam(name = "username", required = true) String username,@RequestParam(name = "password", required = true) String password) {
+    private Result<?> adminLogin(@RequestParam(name = "username", required = true) String username, @RequestParam(name = "password", required = true) String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return Result.error("账号或密码不能为空");
         }
-        if ("admin".equals(username)&&"nishuodedui".equals(password)){
+        if ("admin".equals(username) && "nishuodedui".equals(password)) {
             log.info("repairmanLogin登入普通用户为: " + "admin");
             return Result.ok("管理员登入成功");
         }
