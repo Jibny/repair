@@ -3,6 +3,8 @@ package top.shmly.system.repair.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.shmly.system.repair.entity.RepairRepairman;
 
+import java.util.List;
+
 /**
  * @description:
  * @author: Jibny
@@ -10,5 +12,5 @@ import top.shmly.system.repair.entity.RepairRepairman;
  */
 
 public interface RepairRepairmanService extends IService<RepairRepairman> {
-
+    List<RepairRepairman> getEmails(String category);
 }

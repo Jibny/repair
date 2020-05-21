@@ -15,11 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.shmly.system.repair.contant.RepairOnlineStatus;
 import top.shmly.system.repair.entity.RepairOnline;
+import top.shmly.system.repair.entity.RepairRepairman;
+import top.shmly.system.repair.service.IMailService;
 import top.shmly.system.repair.service.RepairOnlineService;
+import top.shmly.system.repair.service.RepairRepairmanService;
 import top.shmly.system.repair.vo.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @description:
@@ -34,6 +38,10 @@ public class OnlineController {
 
     @Autowired
     private RepairOnlineService repairOnlineService;
+    @Autowired
+    private RepairRepairmanService repairRepairmanService;
+    @Autowired
+    public IMailService iMailService;
 
 
     /**
@@ -188,6 +196,10 @@ public class OnlineController {
         Result<RepairOnline> result = new Result<>();
         try {
             repairOnlineService.save(repairOnline);
+            List<RepairRepairman> repairRepairmens = repairRepairmanService.getEmails(repairOnline.getCategory());
+            for (RepairRepairman repairRepairmen: repairRepairmens) {
+                iMailService.sendSimpleMail(repairRepairmen.getEmail(),"维修处理","您有一条维修申请待处理");
+            }
             result.success("添加成功！");
         } catch (Exception e) {
             log.error(e.getMessage(), e);

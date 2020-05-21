@@ -1,6 +1,6 @@
 server:
   port: 8888
-  path: /
+#  path: /
   servlet:
     context-path: /repair
 
@@ -12,9 +12,9 @@ logging:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://121.36.29.88:3306/repair?useUnicode=true&useSSL=false&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/repair?useUnicode=true&useSSL=false&characterEncoding=utf-8
     username: root
-    password: JiBin.11112222
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # 下面为连接池的补充设置，应用到上面所有数据源中
@@ -60,14 +60,38 @@ spring:
         stat-view-servlet:
           # 1.1.10以后的版本需要指定为true 不然默认是关闭的就会出现404
           enabled: true
+  mail:
+    host: smtp.qq.com #发送邮件服务器
+    username: 806356434@qq.com #发送邮件的邮箱地址
+    password:  jttgckadsxunbfgh #客户端授权码，不是邮箱密码，这个在qq邮箱设置里面自动生成的
+    properties.mail.smtp.port: 465 #端口号465或587
+    from: 806356434@qq.com # 发送邮件的地址，和上面username一致
+    properties.mail.smtp.starttls.enable: true
+    properties.mail.smtp.starttls.required: true
+    properties.mail.smtp.ssl.enable: true
+    default-encoding: utf-8
   jpa:
     show-sql: true
     open-in-view: false
   freemarker:
+    # 设置模板后缀名
     suffix: .ftl
-    template-encoding: UTF-8
-    template-loader-path: classpath:/templates/
-    request-context-attribute: request
+    # 设置文档类型
+    content-type: text/html
+    # 设置页面编码格式
+    charset: UTF-8
+    # 设置页面缓存
+    cache: false
+    prefer-file-system-access: false
+    # 设置ftl文件路径
+    template-loader-path:
+      - classpath:/templates
+  # 设置静态文件路径，js,css等
+  mvc:
+    static-path-pattern: /**
+  resource:
+    static-locations: classpath:/static/,classpath:/public/
+
 
 mybatis-plus:
   mapper-locations: classpath*:top/shmly/system/repair/mapper/xml/*.xml  # 对应mapper映射xml文件的所在路径
@@ -102,7 +126,10 @@ mybatis-plus:
       table-prefix: rsp_
       id-type: assign_id
 
-
+repair:
+  path:
+    uploadWin: D:\opt\upFiles\
+    uploadLinux: /home/upFiles/
 
 
 #pagehelper:

@@ -7,7 +7,7 @@
     ${hello}
 </h1>
 <div>
-    <a href="http://localhost:8080/repair/swagger-ui.html" target="_self">http://localhost:8080/repair/swagger-ui.html</a>
+    <a href="./doc.html" target="_self">hello-repair-swagger-ui-doc</a>
 </div>
 </body>
 </html>

@@ -6,11 +6,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("hello")
+@RequestMapping("")
 public class HelloController {
 
     @RequestMapping("")
-    public String index(Model model) {
+    public String index() {
+        return "index";
+    }
+
+    @RequestMapping("hello")
+    public String hello(Model model) {
         model.addAttribute("hello", "Welcome Repair API Interface!");
         return "hello/hello";
     }
