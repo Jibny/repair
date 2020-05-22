@@ -63,7 +63,6 @@ public class UploadController {
             dbpath = dbpath.replace("\\", "/");
         }
         return Result.ok(dbpath);
-
     }
 
 //    @PostMapping("upload")

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.shmly.system.repair.mapper.RepairAdminMapper">
+    <select id="findByUsername" parameterType="java.lang.Integer" resultType="RepairAdmin">
+        select a.id,a.name,a.username,a.password,a.telephone,a.email,a.gmt_create,a.gmt_modified from rsp_repair_admin a where 1=1
+        <if test="username != null and username !=''">
+            and username=#{username}
+        </if>
+    </select>
+</mapper>

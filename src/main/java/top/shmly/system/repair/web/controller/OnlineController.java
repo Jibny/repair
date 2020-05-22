@@ -68,9 +68,38 @@ public class OnlineController {
         return Result.ok(pageList);
     }
 
+    /**
+     * 搜索栏列表查询
+     *
+     * @param repairOnline
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @ApiOperation(value = "管理员筛选获取报修单数据列表", notes = "管理员筛选获取所有报修单数据列表")
+    @PostMapping(value = "/listSearch")
+    public Result<?> listSearch(@RequestBody RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                HttpServletRequest req) {
+        QueryWrapper<RepairOnline> queryWrapper = new QueryWrapper<>();
+        Page<RepairOnline> page = new Page<RepairOnline>(pageNo, pageSize);
+        queryWrapper
+                .eq(repairOnline.getId() != null, "id", repairOnline.getId())
+                .eq(StringUtils.isNotBlank(repairOnline.getCategory()),"category",repairOnline.getCategory())
+                .like(repairOnline.getUserNumber() != null,"user_number",repairOnline.getUserNumber())
+                .eq(StringUtils.isNotBlank(repairOnline.getStatus()),"status",repairOnline.getStatus())
+                .like(StringUtils.isNotBlank(repairOnline.getRepairmanName()),"repairman_name",repairOnline.getRepairmanName());
+        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper);
+        log.info("搜索当前页：" + pageList.getCurrent());
+        log.info("搜索当前页数量：" + pageList.getSize());
+        log.info("搜索结果数量：" + pageList.getRecords().size());
+        log.info("搜索总数：" + pageList.getTotal());
+        return Result.ok(pageList);
+    }
+
 
     /**
-     * 分页列表查询
+     * 分类分页列表查询
      *
      * @param repairOnline
      * @param pageNo
@@ -81,10 +110,10 @@ public class OnlineController {
     @ApiOperation(value = "获取分类的报修单数据列表", notes = "获取分类的报修单数据列表")
     @GetMapping(value = "/listCategory")
     public Result<?> listCategory(RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                          HttpServletRequest req) {
+                                  HttpServletRequest req) {
         QueryWrapper<RepairOnline> queryWrapper = new QueryWrapper<>();
         Page<RepairOnline> page = new Page<RepairOnline>(pageNo, pageSize);
-        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category",repairOnline.getCategory()));
+        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category", repairOnline.getCategory()));
 
         log.info("查询当前页：" + pageList.getCurrent());
         log.info("查询当前页数量：" + pageList.getSize());
@@ -105,10 +134,10 @@ public class OnlineController {
     @ApiOperation(value = "获取当前用户的报修单数据列表", notes = "获取当前用户的报修单数据列表")
     @GetMapping(value = "/listByUserNumber")
     public Result<?> listByUserNumber(RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                  HttpServletRequest req) {
+                                      HttpServletRequest req) {
         QueryWrapper<RepairOnline> queryWrapper = new QueryWrapper<>();
         Page<RepairOnline> page = new Page<RepairOnline>(pageNo, pageSize);
-        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("user_number",repairOnline.getUserNumber()).eq("status",repairOnline.getStatus()));
+        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("user_number", repairOnline.getUserNumber()).eq("status", repairOnline.getStatus()));
         log.info("查询当前页：" + pageList.getCurrent());
         log.info("查询当前页数量：" + pageList.getSize());
         log.info("查询结果数量：" + pageList.getRecords().size());
@@ -128,11 +157,11 @@ public class OnlineController {
      */
     @ApiOperation(value = "获取分类下的状态的报修单数据列表", notes = "获取分类下的状态的报修单数据列表")
     @GetMapping(value = "/listByCategoryStatus")
-    public Result<?> listByCategoryStatus (RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                      HttpServletRequest req) {
+    public Result<?> listByCategoryStatus(RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                          HttpServletRequest req) {
         QueryWrapper<RepairOnline> queryWrapper = new QueryWrapper<>();
         Page<RepairOnline> page = new Page<RepairOnline>(pageNo, pageSize);
-        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category",repairOnline.getCategory()).eq("status",repairOnline.getStatus()));
+        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category", repairOnline.getCategory()).eq("status", repairOnline.getStatus()));
         log.info("查询结果数量：" + pageList.getRecords().size());
         return Result.ok(pageList);
     }
@@ -148,11 +177,11 @@ public class OnlineController {
      */
     @ApiOperation(value = "获取维修人员历史报修单数据列表", notes = "获取维修人员历史报修单数据列表")
     @GetMapping(value = "/listCategoryStatusName")
-    public Result<?> listByCategoryStatusName (RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                           HttpServletRequest req) {
+    public Result<?> listByCategoryStatusName(RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                              HttpServletRequest req) {
         QueryWrapper<RepairOnline> queryWrapper = new QueryWrapper<>();
         Page<RepairOnline> page = new Page<RepairOnline>(pageNo, pageSize);
-        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category",repairOnline.getCategory()).eq("status",repairOnline.getStatus()).eq("repairman_name",repairOnline.getRepairmanName()));
+        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("category", repairOnline.getCategory()).eq("status", repairOnline.getStatus()).eq("repairman_name", repairOnline.getRepairmanName()));
         log.info("查询结果数量：" + pageList.getRecords().size());
         return Result.ok(pageList);
     }
@@ -169,10 +198,10 @@ public class OnlineController {
     @ApiOperation(value = "获取报修状态的报修单数据列表", notes = "获取报修状态的报修单数据列表")
     @GetMapping(value = "/listStatus")
     public Result<?> listStatus(RepairOnline repairOnline, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                  HttpServletRequest req) {
+                                HttpServletRequest req) {
         QueryWrapper<RepairOnline> queryWrapper = new QueryWrapper<>();
         Page<RepairOnline> page = new Page<RepairOnline>(pageNo, pageSize);
-        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("status",repairOnline.getStatus()));
+        IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq("status", repairOnline.getStatus()));
         //IPage<RepairOnline> pageList = repairOnlineService.page(page, queryWrapper.eq(!StringUtils.isBlank(repairOnline.getStatus()),"status",repairOnline.getStatus()));
         log.info("查询当前页：" + pageList.getCurrent());
         log.info("查询当前页数量：" + pageList.getSize());
@@ -180,8 +209,6 @@ public class OnlineController {
         log.info("数据总数：" + pageList.getTotal());
         return Result.ok(pageList);
     }
-
-
 
 
     /**
@@ -197,8 +224,8 @@ public class OnlineController {
         try {
             repairOnlineService.save(repairOnline);
             List<RepairRepairman> repairRepairmens = repairRepairmanService.getEmails(repairOnline.getCategory());
-            for (RepairRepairman repairRepairmen: repairRepairmens) {
-                iMailService.sendSimpleMail(repairRepairmen.getEmail(),"维修处理","您有一条维修申请待处理,报修地址:"+repairOnline.getArea()+"--"+repairOnline.getDorm()+"\n故障描述："+repairOnline.getProblem()+"\n请登入系统进行处理：http://localhost:8080/");
+            for (RepairRepairman repairRepairmen : repairRepairmens) {
+                iMailService.sendSimpleMail(repairRepairmen.getEmail(), "维修处理", "您有一条维修申请待处理,报修地址:" + repairOnline.getArea() + "--" + repairOnline.getDorm() + "\n故障描述：" + repairOnline.getProblem() + "\n请登入系统进行处理：http://localhost:8080/");
             }
             result.success("添加成功！");
         } catch (Exception e) {
@@ -274,7 +301,7 @@ public class OnlineController {
     @PutMapping(value = "/applyById")
     @ApiOperation(value = "通过ID申请报修单状态", notes = "申请报修单状态")
     public Result<?> applyById(@ApiParam(name = "id", value = "报修单id", required = true) @RequestParam(name = "id", required = true) String id) {
-        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id",id).set("status", RepairOnlineStatus.STATUS_APPLICATION));
+        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id", id).set("status", RepairOnlineStatus.STATUS_APPLICATION));
         log.info("applyById查询报修单: " + id);
         return Result.ok(RepairOnlineStatus.STATUS_APPLICATION);
     }
@@ -288,7 +315,7 @@ public class OnlineController {
     @PutMapping(value = "/dealById")
     @ApiOperation(value = "通过ID处理报修单状态", notes = "处理报修单状态")
     public Result<?> dealById(@ApiParam(name = "id", value = "报修单id", required = true) @RequestParam(name = "id", required = true) String id) {
-        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id",id).set("status", RepairOnlineStatus.STATUS_DEAL));
+        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id", id).set("status", RepairOnlineStatus.STATUS_DEAL));
         log.info("applyById查询报修单: " + id);
         return Result.ok(RepairOnlineStatus.STATUS_DEAL);
     }
@@ -302,7 +329,7 @@ public class OnlineController {
     @PutMapping(value = "/completeById")
     @ApiOperation(value = "通过ID完成报修单状态", notes = "完成报修单状态")
     public Result<?> completeById(@ApiParam(name = "id", value = "报修单id", required = true) @RequestParam(name = "id", required = true) String id) {
-        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id",id).set("status", RepairOnlineStatus.STATUS_COMPLETE));
+        repairOnlineService.update(new UpdateWrapper<RepairOnline>().eq("id", id).set("status", RepairOnlineStatus.STATUS_COMPLETE));
         log.info("applyById查询报修单: " + id);
         return Result.ok(RepairOnlineStatus.STATUS_COMPLETE);
     }

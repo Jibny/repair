@@ -7,8 +7,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.shmly.system.repair.entity.RepairAdmin;
 import top.shmly.system.repair.entity.RepairRepairman;
 import top.shmly.system.repair.entity.RepairUser;
+import top.shmly.system.repair.service.RepairAdminService;
 import top.shmly.system.repair.service.RepairRepairmanService;
 import top.shmly.system.repair.service.RepairUserService;
 import top.shmly.system.repair.vo.Result;
@@ -31,6 +33,9 @@ public class LoginController {
 
     @Autowired
     private RepairRepairmanService repairRepairmanService;
+
+    @Autowired
+    private RepairAdminService repairAdminService;
 
 
     /**
@@ -61,7 +66,7 @@ public class LoginController {
         return Result.ok(repairUser);
     }
 
-        /**
+    /**
      * @param username,password
      * @description: 报修用户登入
      * @author: Jibny
@@ -78,7 +83,7 @@ public class LoginController {
         RepairRepairman repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("username", username), false);
         if (null == repairRepairman || "".equals(repairRepairman.getName())) {
             repairRepairman = repairRepairmanService.getOne(new QueryWrapper<RepairRepairman>().eq("number", username), false);
-            if (null == repairRepairman || "".equals(repairRepairman.getName())){
+            if (null == repairRepairman || "".equals(repairRepairman.getName())) {
                 return Result.error("该维修人员不存在");
             }
         }
@@ -188,11 +193,15 @@ public class LoginController {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             return Result.error("账号或密码不能为空");
         }
-        if ("admin".equals(username) && "nishuodedui".equals(password)) {
-            log.info("repairmanLogin登入普通用户为: " + "admin");
-            return Result.ok("管理员登入成功");
+        RepairAdmin repairAdmin = repairAdminService.findByUsername(username);
+        if (null == repairAdmin || "".equals(repairAdmin.getName())) {
+            return Result.error("该管理员不存在");
         }
-        return Result.error("账号或密码错误");
+        if(!repairAdmin.getPassword().equals(password)){
+            return Result.error("输入密码错误");
+        }
+        log.info("AdminLogin登录管理员为: " + repairAdmin.getName());
+        return Result.ok(repairAdmin);
     }
 
 }
